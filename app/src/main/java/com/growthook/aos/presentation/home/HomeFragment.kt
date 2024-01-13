@@ -66,7 +66,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         clickAddCave()
         getCaves()
         clickAddSeedBtn()
-        setThook()
     }
 
     override fun onResume() {
@@ -160,20 +159,17 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                     negativeAction = {
                     },
                     positiveAction = {
-                        viewModel.unLockSeed(item.seedId)
-                        viewModel.isUnlock.observe(viewLifecycleOwner) {
-                            Toast.makeText(context, "잠금이 영구적으로 해제되었어요!", Toast.LENGTH_SHORT).show()
-                            startActivity(
-                                ActionplanInsightActivity.getIntent(
-                                    requireContext(),
-                                    item.seedId,
-                                ),
-                            )
-                        }
+                        Toast.makeText(context, "잠금이 영구적으로 해제되었어요!", Toast.LENGTH_SHORT).show()
+                        startActivity(
+                            ActionplanInsightActivity.getIntent(
+                                requireContext(),
+                                DUMMY_SEED,
+                            ),
+                        )
                     },
                 ).show(parentFragmentManager, InsightMenuBottomsheet.DELETE_DIALOG)
-        } else if (!item.hasActionPlan) {
-            startActivity(ActionplanInsightActivity.getIntent(requireContext(), item.seedId))
+        } else if (!item.isAction) {
+            startActivity(ActionplanInsightActivity.getIntent(requireContext(), DUMMY_SEED))
         }
     }
 
@@ -198,14 +194,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         startActivity(intent)
     }
 
-    private fun clickedScrap(seedId: Int) {
-        viewModel.changeScrap(seedId)
-        viewModel.isScrapedSuccess.observe(viewLifecycleOwner) { isSuccess ->
-            if (isSuccess) {
-                viewModel.getInsights()
-                Toast.makeText(requireContext(), "스크랩 완료", Toast.LENGTH_SHORT).show()
-            }
-        }
+    private fun clickedScrap(isScrap: Boolean) {
+        viewModel.changeScrap(isScrap)
+        Timber.d("스크랩 $isScrap")
+        Toast.makeText(requireContext(), "스크랩 완료", Toast.LENGTH_SHORT).show()
     }
 
     private fun setAlertMessage() {
@@ -267,15 +259,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         }
     }
 
-    private fun setThook() {
-        viewModel.gatherdThook.observe(viewLifecycleOwner) { thookCount ->
-            binding.tvHomeGathredThook.text = thookCount.toString()
-        }
-    }
-
     override fun onDestroyView() {
         _caveAdapter = null
         _insightAdapter = null
         super.onDestroyView()
+    }
+
+    companion object {
+        private const val DUMMY_SEED = 47
     }
 }

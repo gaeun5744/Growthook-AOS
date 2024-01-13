@@ -1,10 +1,10 @@
 package com.growthook.aos.domain.entity
 
 data class Insight(
-    val seedId: Int,
-    val name: String,
-    val remainingDays: Int,
-    val isLocked: Boolean,
+    val title: String,
+    val remainedLock: Int,
     val isScraped: Boolean,
-    val hasActionPlan: Boolean,
+    val isLocked: Boolean,
+    val isAction: Boolean,
+    val insightId: Int,
 )

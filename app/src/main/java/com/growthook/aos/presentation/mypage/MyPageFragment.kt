@@ -30,8 +30,6 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setNickName()
-        setGatherdThook()
-        setUsedThook()
         clickDetailMyInfo()
         clickLogout()
     }
@@ -59,18 +57,6 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding>() {
                     startActivity(intent)
                 }
             }
-        }
-    }
-
-    private fun setGatherdThook() {
-        viewModel.gatherdThook.observe(viewLifecycleOwner) { thookCount ->
-            binding.tvMyPageHarvestThookCount.text = thookCount.toString()
-        }
-    }
-
-    private fun setUsedThook() {
-        viewModel.usedThook.observe(viewLifecycleOwner) { thookCount ->
-            binding.tvMyPageUsedThookCount.text = thookCount.toString()
         }
     }
 }
